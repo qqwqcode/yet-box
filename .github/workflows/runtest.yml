@@ -25,4 +25,4 @@ jobs:
 
     - name: Run test
       run: |
-        go run ./cmd/sing-box/main.go
+        go run ./cmd/sing-box run
