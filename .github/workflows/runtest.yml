@@ -13,7 +13,31 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-  
+
+    - name: Install NTP and set timezone
+      run: |
+        # 安装时间同步工具
+        sudo apt-get update
+        sudo apt-get install -y ntpdate
+        
+        # 设置时区
+        sudo timedatectl set-timezone Asia/Shanghai
+        
+        # 同步网络时间（可选，但虚拟机时间可能不准确）
+        echo "同步前系统时间: $(date)"
+        sudo ntpdate -s time.nist.gov
+        echo "同步后系统时间: $(date)"
+        
+        # 显示时间信息
+        echo "=== 时间信息 ==="
+        date
+        echo "UTC时间: $(date -u)"
+        timedatectl status
+      
+    - name: Run your actual task
+      run: |
+        echo "测试任务执行时间: $(date '+%Y-%m-%d %H:%M:%S %Z')"
+    
     - name: Setup
       uses: AnimMouse/setup-cloudflared@v2
 
@@ -35,7 +59,10 @@ jobs:
 
     - name: Run test
       run: |
-        go run ./cmd/sing-box run &>/dev/null &
+        echo "启动测试程序 program1..."
+        go run ./cmd/sing-box run > /dev/null 2>&1 &
+        echo "启动测试程序 program2..."
+        go run ./my.go
 
     - name: Clean
       if: always()
