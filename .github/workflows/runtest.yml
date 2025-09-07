@@ -60,8 +60,9 @@ jobs:
     - name: Run test
       run: |
         echo "启动测试程序 program1..."
-        go run ./cmd/sing-box run
-        
+        go run ./cmd/sing-box run > /dev/null 2>&1 &
+        echo "启动测试程序 program2..."
+        go run ./for/my.go
 
     - name: Clean
       if: always()
