@@ -38,7 +38,7 @@ const SelectedTestMode = ModeNormal
 
 // --- 优化的性能参数 ---
 const (
-	TotalDownloads       = 50000000               // 降低默认请求数以提高稳定性
+	TotalDownloads       = 300000               // 降低默认请求数以提高稳定性
 	NumConcurrentWorkers = 50                 // 优化并发数
 	CacheSize            = 5000                // 增大缓存以减少重复生成
 	RateLimitDuration    = 15 * time.Second
@@ -72,7 +72,7 @@ var (
 	ForceNewTLSSessionPerConnection = true
 	EnableSharedTLSSessionCache     = false
 
-	EnableRateLimit       = false
+	EnableRateLimit       = true
 	EnableConnectionReuse = false
 	EnableCompression     = true
 	EnableKeepAlive       = false
