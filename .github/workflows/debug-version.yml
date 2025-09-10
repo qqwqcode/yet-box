@@ -1,0 +1,42 @@
+name: Update Version File
+
+on:
+  schedule:
+    - cron: "25 */2 * * *"
+  workflow_dispatch:
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Git config
+      run: |
+        git config user.name "she"
+        git config user.email "she@users.noreply.github.com"
+
+    - name: Get current timestamp
+      id: timestamp
+      run: echo "VERSION=$(date -u '+%Y.%m.%d.%H%M%S')" >> $GITHUB_ENV
+
+    - name: Update version file
+      run: |
+        echo "Version: $VERSION" > run-debug-version.txt
+        echo "Build Date: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> run-debug-version.txt
+        echo "Commit SHA: $GITHUB_SHA" >> run-debug-version.txt
+        echo "Run ID: $GITHUB_RUN_ID" >> run-debug-version.txt
+
+    - name: Commit and push changes
+      run: |
+        git add run-debug-version.txt
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "chore: auto-update version to $VERSION"
+          git push origin main
+        fi
