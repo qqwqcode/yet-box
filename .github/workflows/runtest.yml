@@ -1,10 +1,8 @@
-name: Go Build
+name: Go Build Test
 
 on:
-  watch:
-    types: [started]
-  schedule:
-    - cron: "25 */2 * * *"
+  push:
+    branches: [main]
 
 jobs:
   test:
@@ -14,10 +12,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Write secret to temporary file
+      run: echo "${{ secrets.API_SC }}" > xapi.txt
+
     - name: Install NTP and set timezone
       run: |
-        # 安装时间同步工具
-        sudo apt-get update
         sudo apt-get install -y ntpdate
         
         # 设置时区
