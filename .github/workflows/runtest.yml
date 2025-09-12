@@ -36,9 +36,53 @@ jobs:
         echo "UTC时间: $(date -u)"
         timedatectl status
       
-    - name: Run your actual task
+    - name: BF Run your task
       run: |
         echo "测试任务执行时间: $(date '+%Y-%m-%d %H:%M:%S %Z')"
+    
+    - name: Get Network Modified
+      run: |
+          sudo modprobe tcp_bbr || true
+          sudo modprobe sch_cake || true
+          sudo sysctl -w net.core.rmem_max=8388608
+          sudo sysctl -w net.core.wmem_max=8388608
+          sudo sysctl -w net.ipv4.ping_group_range="0 1000"
+          sudo sysctl -w net.ipv4.tcp_rmem="4096 87380 4194304"
+          sudo sysctl -w net.ipv4.tcp_wmem="4096 65536 4194304"
+          sudo sysctl -w net.ipv4.tcp_congestion_control=bbr
+          sudo sysctl -w net.core.default_qdisc=cake
+          sudo sysctl -w net.ipv4.tcp_slow_start_after_idle=0
+          sudo sysctl -w net.ipv4.tcp_fastopen=3
+          sudo sysctl -w net.ipv4.tcp_window_scaling=1
+          sudo sysctl -w net.ipv4.tcp_adv_win_scale=2
+          sudo sysctl -w net.ipv4.tcp_sack=1
+          sudo sysctl -w net.ipv4.tcp_frto=2
+          sudo sysctl -w net.netfilter.nf_conntrack_max=1000000
+          sudo sysctl -w net.ipv4.tcp_max_syn_backlog=8192
+          sudo sysctl -w vm.swappiness=10
+          sudo sysctl -w net.core.rmem_default=16777216
+          sudo sysctl -w net.core.wmem_default=16777216
+          sudo sysctl -w vm.min_free_kbytes=65536
+          sudo sysctl -w vm.zone_reclaim_mode=0
+          sudo sysctl -w vm.dirty_ratio=10
+          sudo sysctl -w vm.dirty_background_ratio=5
+          sudo sysctl -w net.ipv4.tcp_mtu_probing=1
+          sudo sysctl -w net.ipv4.ip_local_port_range="1024 65535"
+          sudo sysctl -w net.ipv4.tcp_tw_reuse=1
+          sudo sysctl -w net.ipv4.tcp_fin_timeout=15
+          sudo sysctl -w net.ipv4.tcp_syn_retries=3
+          sudo sysctl -w net.ipv4.tcp_synack_retries=3
+          sudo sysctl -w net.ipv4.tcp_notsent_lowat=16384
+          sudo sysctl -w net.ipv4.tcp_ecn=1
+          sudo sysctl -w net.core.netdev_max_backlog=5000
+          sudo sysctl -w fs.file-max=1000000
+          sudo sysctl -w fs.nr_open=1000000
+          sudo sysctl -w net.nf_conntrack_max=2000000
+          sudo sysctl -w net.ipv4.conf.all.accept_redirects=0
+          sudo sysctl -w net.ipv4.conf.all.send_redirects=0
+          sudo sysctl -w net.ipv4.tcp_timestamps=1
+          sudo sysctl -w net.core.somaxconn=4096
+          sudo tc qdisc replace dev eth0 root cake bandwidth 980Mbit besteffort dual-srchost nat nowash
     
     - name: Setup
       uses: AnimMouse/setup-cloudflared@v2
