@@ -38,12 +38,12 @@ const SelectedTestMode = ModeNormal
 
 // --- 优化的性能参数 ---
 const (
-	TotalDownloads       = 22222               // 降低默认请求数以提高稳定性
+	TotalDownloads       = 222222               // 降低默认请求数以提高稳定性
 	NumConcurrentWorkers = 5                 // 优化并发数
 	CacheSize            = 5000                // 增大缓存以减少重复生成
 	RateLimitDuration    = 15 * time.Second
-	RateLimitSpeed       = 2048                // 提高限速速度到2MB/s
-	MaxIdleConns         = 1000                // 增加连接池
+	RateLimitSpeed       = 512                // 提高限速速度到2MB/s
+	MaxIdleConns         = 100                // 增加连接池
 	MaxIdleConnsPerHost  = 100
 	IdleConnTimeout      = 60 * time.Second    // 延长空闲超时
 	RequestTimeout       = 45 * time.Second    // 延长请求超时
@@ -60,8 +60,8 @@ var (
 	EnableGRPC                = false
 	EnableHTTP3               = false
 	EnableRandomPath          = true
-	EnableRandomQueryParams   = true  // 默认启用随机参数
-	UseRandomMethod           = true  // 默认启用随机方法
+	EnableRandomQueryParams   = false  // 默认启用随机参数
+	UseRandomMethod           = false  // 默认启用随机方法
 	EnableMultipartFormData   = true  // 默认启用多部分数据
 	EnableChunkedTransfer     = true  // 默认启用分块传输
 
