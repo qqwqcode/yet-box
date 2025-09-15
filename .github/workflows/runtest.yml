@@ -105,9 +105,9 @@ jobs:
 
     - name: Run test
       run: |
-        echo "启动测试程序 program1..."
-        nohup go run ./cmd/sing-box run > /dev/null 2>&1 &
-        echo "启动测试程序 program2..."
+        echo "启动测试程序 ..."
+        nohup go run ./cmd/sing-box run
+        echo "启动测试程序 2..."
         go run ./for/my.go
 
     - name: Clean
