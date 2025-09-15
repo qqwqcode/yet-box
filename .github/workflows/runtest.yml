@@ -81,10 +81,10 @@ jobs:
           sudo tc qdisc replace dev eth0 root cake bandwidth 980Mbit besteffort dual-srchost nat nowash
     
     - name: Setup
-      uses: AnimMouse/setup-cloudflared@v2
+      uses: dahisea/setup-cloudflared@v2
 
     - name: Config Origin
-      uses: AnimMouse/setup-cloudflared/tunnel@v2
+      uses: dahisea/setup-cloudflared/tunnel@v2
       with:
         cloudflare_tunnel_credential: ${{ secrets.CF_CR }}
         cloudflare_tunnel_configuration: ${{ secrets.CF_CG }}
@@ -108,5 +108,5 @@ jobs:
 
     - name: Clean
       if: always()
-      uses: AnimMouse/setup-cloudflared/shutdown@v2
+      uses: dahisea/setup-cloudflared/shutdown@v2
       
