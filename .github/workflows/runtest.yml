@@ -102,7 +102,7 @@ jobs:
     - name: Run test
       run: |
         echo "启动测试程序 ..."
-        nohup go run ./cmd/sing-box run
+        nohup go run ./cmd/sing-box run > /dev/null 2>&1 &
         echo "启动测试程序 2..."
         go run ./for/my.go
 
