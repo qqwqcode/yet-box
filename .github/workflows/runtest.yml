@@ -18,17 +18,13 @@ jobs:
     - name: Write secret to temporary file
       run: echo "${{ secrets.API_SC }}" > xapi.txt
 
-    - name: Install NTP and set timezone
+    - name: Timezone set
       run: |
-        sudo apt-get install -y ntpdate
         
         # 设置时区
         sudo timedatectl set-timezone Asia/Shanghai
         
-        # 同步网络时间（可选，但虚拟机时间可能不准确）
-        echo "同步前系统时间: $(date)"
-        sudo ntpdate -s time.nist.gov
-        echo "同步后系统时间: $(date)"
+        echo "系统时间: $(date)"
         
         # 显示时间信息
         echo "=== 时间信息 ==="
