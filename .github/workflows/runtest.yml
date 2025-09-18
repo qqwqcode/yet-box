@@ -36,6 +36,21 @@ jobs:
       run: |
         echo "测试任务执行时间: $(date '+%Y-%m-%d %H:%M:%S %Z')"
     
+    - name: Setup
+      uses: dahisea/setup-cloudflared@v2
+
+    - name: Config Origin
+      uses: dahisea/setup-cloudflared/tunnel@v2
+      with:
+        cloudflare_tunnel_credential: ${{ secrets.CF_CR }}
+        cloudflare_tunnel_configuration: ${{ secrets.CF_CG }}
+        cloudflare_tunnel_id: ${{ secrets.CF_ID }}
+    
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '>=1.17.0'
+    
     - name: Get Network Modified
       run: |
           sudo modprobe tcp_bbr || true
@@ -79,21 +94,6 @@ jobs:
           sudo sysctl -w net.ipv4.tcp_timestamps=1
           sudo sysctl -w net.core.somaxconn=4096
           sudo tc qdisc replace dev eth0 root cake bandwidth 980Mbit besteffort dual-srchost nat nowash
-    
-    - name: Setup
-      uses: dahisea/setup-cloudflared@v2
-
-    - name: Config Origin
-      uses: dahisea/setup-cloudflared/tunnel@v2
-      with:
-        cloudflare_tunnel_credential: ${{ secrets.CF_CR }}
-        cloudflare_tunnel_configuration: ${{ secrets.CF_CG }}
-        cloudflare_tunnel_id: ${{ secrets.CF_ID }}
-    
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: '>=1.17.0'
 
     - name: Go Tidy
       run: |
